@@ -1,0 +1,8 @@
+log/
+data/
+.idea/
+*.pyc
+*.swp
+*.job.*/
+**/server_outputs*
+cgal_cpp/results/

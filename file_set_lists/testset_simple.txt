@@ -1,0 +1,11 @@
+icosahedron100k
+sphere100k
+cylinder100k
+Liberty100k
+pipe100k
+pipe_curve100k
+Boxy_smooth100k
+sphere_analytic100k
+cylinder_analytic100k
+sheet_analytic100k
+
