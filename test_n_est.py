@@ -18,9 +18,6 @@ sys.path.append(os.path.join(BASE_DIR_PATH.parent, 'models'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
 from dataset import PointcloudPatchDataset, SequentialShapeRandomPointcloudPatchSampler, RandomPointcloudPatchSampler, SequentialPointcloudPatchSampler
 
-# import DeepFitNormalsExperts
-# from pcpnet_res import PCPNetRes
-import visualization
 
 # python3 test_n_est.py --models 'Deepfit_simple_sigmoid_cr_log_d1_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d2_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d3_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d4_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d4_p128_Lsin' 'Deepfit_simple_sigmoid_cr_log_d3_p128_Lsin' 'Deepfit_simple_sigmoid_cr_log_d2_p128_Lsin' --logdir './log/jetnet_nci_new3/ablations/' --sparse_patches 1 --testset 'testset_all.txt'
 
@@ -30,10 +27,9 @@ def parse_arguments():
     # naming / file handling
     parser.add_argument('--indir', type=str, default='/home/sitzikbs/Datasets/pcpnet/', help='input folder (point clouds)')
     parser.add_argument('--testset', type=str, default='vis_set.txt', help='shape set file name')
-    parser.add_argument('--models', type=str, default='Deepfit_knn_lr0.001_sigmoid_cr_log_d3_p256_Lsin', help='names of trained models, can evaluate multiple models')
+    parser.add_argument('--models', type=str, default='DeepFit', help='names of trained models, can evaluate multiple models')
     parser.add_argument('--modelpostfix', type=str, default='_model_599.pth', help='model file postfix')
-    parser.add_argument('--logdir', type=str, default='./log/jetnet_nci_new3/ablations/', help='model folder')
-    # parser.add_argument('--modeldir', type=str, default='./log/debug/trained_models/', help='model folder')
+    parser.add_argument('--logdir', type=str, default='./trained_models/', help='model folder')
     parser.add_argument('--parmpostfix', type=str, default='_params.pth', help='parameter file postfix')
     parser.add_argument('--gpu_idx', type=int, default=1, help='set < 0 to use CPU')
 
@@ -43,10 +39,9 @@ def parse_arguments():
                         'sequential_shapes_random_patches: pick n random points from each shape as patch centers, shape order is not randomized')
     parser.add_argument('--patches_per_shape', type=int, default=1000, help='number of patches evaluated in each shape (only for sequential_shapes_random_patches)')
     parser.add_argument('--seed', type=int, default=40938661, help='manual seed')
-    parser.add_argument('--batchSize', type=int, default=1024, help='batch size, if 0 the training batch size is used')
+    parser.add_argument('--batchSize', type=int, default=0, help='batch size, if 0 the training batch size is used')
     parser.add_argument('--workers', type=int, default=1, help='number of data loading workers - 0 means same thread as main execution')
     parser.add_argument('--cache_capacity', type=int, default=100, help='Max. number of dataset elements (usually shapes) to hold in the cache at the same time.')
-    parser.add_argument('--export_visualization', type=int, default=False, help='flag if to export visualizations')
     return parser.parse_args()
 
 def test_n_est(opt):
@@ -58,12 +53,11 @@ def test_n_est(opt):
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  # see issue #152
     os.environ["CUDA_VISIBLE_DEVICES"] = str(opt.gpu_idx)
     device = torch.device("cpu" if opt.gpu_idx < 0 else "cuda:%d" % 0)
-    # device = torch.device("cpu" if opt.gpu_idx < 0 else "cuda:%d" % opt.gpu_idx)
 
     for model_name in opt.models:
        # fetch the model from the log dir
 
-        # DeepFitNormals = importlib.import_module('DeepFitNormals.py') #import network
+
         # append model name to output directory and create directory if necessary
         model_log_dir =  os.path.join(opt.logdir, model_name, 'trained_models')
         model_filename = os.path.join(model_log_dir, model_name+opt.modelpostfix)
@@ -71,12 +65,6 @@ def test_n_est(opt):
         output_dir = os.path.join(opt.logdir, model_name, 'results')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-
-        if opt.export_visualization: #make visualization firectory
-            vis_dir = os.path.join(opt.logdir, model_name, 'vis')
-            if not os.path.exists(vis_dir):
-                os.makedirs(vis_dir)
-
 
         print("Random Seed: %d" % (opt.seed))
         random.seed(opt.seed)
@@ -93,60 +81,26 @@ def test_n_est(opt):
         dataloader, dataset, datasampler = get_data_loaders(opt, trainopt, target_features)
 
         if trainopt.arch == 'simple':
-            spec = importlib.util.spec_from_file_location("DeepFitNormals", os.path.join(
-                os.path.join(opt.logdir, model_name, "DeepFitNormals.py")))
-            DeepFitNormals = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(DeepFitNormals)
-            regressor = DeepFitNormals.SimpPointNet(1, num_points=trainopt.points_per_patch, fit_type=trainopt.fit_type,
+            spec = importlib.util.spec_from_file_location("DeepFit", os.path.join(
+                os.path.join(opt.logdir, model_name, "DeepFit.py")))
+            DeepFit = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(DeepFit)
+            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
                                                     use_point_stn=trainopt.use_point_stn,
                                                     use_feat_stn=trainopt.use_feat_stn, point_tuple=1,
                                                     sym_op=trainopt.sym_op, jet_order=trainopt.jet_order,
-                                                    concat_prf=trainopt.concat_prf,
                                                     weight_mode=trainopt.weight_mode).cuda()
         elif trainopt.arch == '3dmfv':
             spec = importlib.util.spec_from_file_location("DeepFitNormals", os.path.join(
                 os.path.join(opt.logdir, model_name, "DeepFitNormals.py")))
-            DeepFitNormals = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(DeepFitNormals)
-            regressor = DeepFitNormals.SimpPointNet(1, num_points=trainopt.points_per_patch, fit_type=trainopt.fit_type,
+            DeepFit = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(DeepFit)
+            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
                                                 use_point_stn=trainopt.use_point_stn,
                                                 use_feat_stn=trainopt.use_feat_stn, point_tuple=trainopt.point_tuple,
                                                 sym_op=trainopt.sym_op, arch=trainopt.arch,
                                                 n_gaussians=trainopt.n_gaussians, jet_order=trainopt.jet_order,
-                                                concat_prf=trainopt.concat_prf,
                                                 weight_mode=trainopt.weight_mode).cuda()
-        elif trainopt.arch == 'res':
-            regressor = DeepFitNormals.ResPointNet(1, fit_type=trainopt.fit_type).cuda()
-        elif trainopt.arch == 'pcpnet_res':
-            regressor = PCPNetRes(
-                num_points=trainopt.points_per_patch,
-                output_dim=3,
-                use_point_stn=trainopt.use_point_stn,
-                use_feat_stn=trainopt.use_feat_stn,
-                sym_op=trainopt.sym_op,
-                point_tuple=trainopt.point_tuple)
-        elif trainopt.arch == 'experts':
-            spec = importlib.util.spec_from_file_location("DeepFitNormalsExperts", os.path.join(
-                os.path.join(opt.logdir, model_name, "DeepFitNormalsExperts.py")))
-            DeepFitNormalsExperts = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(DeepFitNormalsExperts)
-            regressor = DeepFitNormalsExperts.DeepFitExperts(trainopt.points_per_patch,
-                                                     use_point_stn=trainopt.use_point_stn, use_feat_stn=trainopt.use_feat_stn,
-                                                     point_tuple=trainopt.point_tuple, sym_op=trainopt.sym_op, arch='pointnet',
-                                                     n_gaussians=trainopt.n_gaussians, n_experts=trainopt.n_experts,
-                                                     weight_mode=trainopt.weight_mode, use_consistancy=trainopt.use_consistency,
-                                                     compute_residuals=trainopt.compute_residuals).cuda()
-        elif trainopt.arch == 'var':
-            spec = importlib.util.spec_from_file_location("DeepFitNormals", os.path.join(
-                os.path.join(opt.logdir, model_name, "DeepFitNormals.py")))
-            DeepFitNormals = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(DeepFitNormals)
-            regressor = DeepFitNormals.VarPointNet(1, trainopt.points_per_patch, fit_type=trainopt.fit_type,
-                                               use_point_stn=trainopt.use_point_stn, use_feat_stn=trainopt.use_feat_stn,
-                                               point_tuple=trainopt.point_tuple, sym_op=trainopt.sym_op,
-                                               jet_order=trainopt.jet_order, concat_prf=trainopt.concat_prf,
-                                               weight_mode=trainopt.weight_mode, use_consistency=trainopt.use_consistency,
-                                               compute_residuals=trainopt.compute_residuals).cuda()
         else:
             raise ValueError("unsupported architecture")
 
@@ -188,14 +142,6 @@ def test_n_est(opt):
                     start_time = time.time()
                     n_est, beta_pred, weights, n_res, trans, _, _, _ = regressor(points, n_effective_points)
                     end_time = time.time()
-                elif trainopt.arch =='pcpnet_res':
-                    n_est, trans, _, _, n_res = regressor(points)
-                elif trainopt.arch == 'experts':
-                    n_est, beta_pred, weights, n_res, trans, trans2, expert_prob, expert_normals, neighbor_normals, \
-                    residuals, all_experts_weights = regressor(points, n_effective_points)
-                elif trainopt.arch == 'var':
-                    n_est, beta_pred, weights, n_res, trans, trans2, neighbor_normals, residuals,\
-                    distribution_params = regressor(points, n_effective_points)
 
             print("elapsed_time per point: {} ms", 1000*(end_time-start_time) / opt.batchSize)
 
@@ -204,57 +150,11 @@ def test_n_est(opt):
                 # since we know the transform to be a rotation (QSTN), the transpose is the inverse
                 n_est[:, :] = torch.bmm(n_est.unsqueeze(1), trans.transpose(2, 1)).squeeze(dim=1)
 
-            if opt.export_visualization:
-                # export visualizations
-                for i, beta in enumerate(beta_pred):
-                    if i%100 == 0:
-                        img_name = os.path.join(vis_dir, dataset.shape_names[shape_ind] + '_' + str(batchind)+str(i)+'point_cloud_local.png')
-                        rng = 1
-                        original_points = points[i].transpose(1, 0)
-                        surf_range = [1.1*torch.min(original_points).detach().cpu().numpy(),
-                                      1.1*torch.max(original_points).detach().cpu().numpy()] # 10% margin
-                        np_beta = beta_pred[i].cpu().detach().numpy()
-                        np_points = original_points.transpose(1, 0).cpu().detach().numpy()
-                        c_range = [torch.min(weights[i]).detach().cpu().numpy(), torch.max(weights[i]).detach().cpu().numpy()]
-                        # c_range = [0, 1]
-                        ax = visualization.visualize_3d_points(np_points,
-                                                          xlimit=[-rng, rng], ylimit=[-rng, rng], zlimit=[-rng, rng],
-                                                               ax=None, display=False,
-                                                               weights=weights[i].cpu().detach().numpy(), vistype='color',
-                                                               img_name=img_name, export=False, c_range=c_range)
-                        if trainopt.use_point_stn:
-                            transform = trans[i].transpose(1, 0).cpu().detach().numpy()
-                        else:
-                            transform=None
-                        ax = visualization.plot_parametric_jet(np_beta, color='r', ax=ax, display=False, label_txt='',
-                                                               export=False, img_name='default_name', alpha=0.5,
-                                                               trans=transform, surf_range=surf_range)
-
-                        # visualization.plot_plane_normal(np_beta, np_points, color='r', ax=ax, display=False, mode='one')
-                        sign = torch.sign(torch.matmul(n_est[i].unsqueeze(-1).permute(1, 0), target[0][i].unsqueeze(-1)).squeeze())
-                        visualization.plot_normals((sign*n_est[i]).unsqueeze(-1).cpu().detach().numpy(), np_points, color='r',
-                                                   ax=ax, display=False, mode='one')
-                        visualization.plot_normals(target[0][i].unsqueeze(-1).cpu().detach().numpy(), np_points, color='g',
-                                                   ax=ax, display=False, mode='one', export=True, img_name=img_name)
-
 
 
             if trainopt.use_pca:
                 # transform predictions with inverse pca rotation (back to world space)
                 n_est[:, :] = torch.bmm(n_est.unsqueeze(1), data_trans.transpose(2, 1)).squeeze(dim=1)
-
-
-
-            # # debugging - visualizing what the network learns
-            # idx = 0
-            # ax = visualization.visualize_3d_points(points[idx].cpu().detach().numpy(),
-            #                                   xlimit=[-1, 1], ylimit=[-1, 1], zlimit=[-1, 1], ax=None, display=False,
-            #                                   weights=weights[idx].cpu().detach().numpy(), vistype='color')
-            # visualization.plot_normals(target[0][idx].unsqueeze(0).cpu().detach().numpy().T,
-            #                            np.array([[0, 0, 0]]).T, color='g', ax=ax, display=False, mode='single')
-            # visualization.plot_normals(n_est[idx].unsqueeze(0).cpu().detach().numpy().T, np.array([[0, 0, 0]]).T,
-            #                            color='r', ax=ax, display=True, mode='single')
-
 
             print('[%s %d/%d] shape %s' % (model_name, batchind, num_batch-1, dataset.shape_names[shape_ind]))
 

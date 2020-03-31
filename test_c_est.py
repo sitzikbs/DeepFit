@@ -83,35 +83,18 @@ def test_n_est(opt):
         dataloader, dataset, datasampler = get_data_loaders(opt, trainopt, target_features)
 
         if trainopt.arch == 'simple':
-            regressor = DeepFitNormals.SimpPointNet(1, num_points=trainopt.points_per_patch, fit_type=trainopt.fit_type,
+            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
                                                     use_point_stn=trainopt.use_point_stn,
                                                     use_feat_stn=trainopt.use_feat_stn, point_tuple=1,
                                                     sym_op=trainopt.sym_op, jet_order=trainopt.jet_order,
-                                                    concat_prf=trainopt.concat_prf,
                                                     weight_mode=trainopt.weight_mode).cuda()
         elif trainopt.arch == '3dmfv':
-            regressor = DeepFitNormals.SimpPointNet(1, num_points=trainopt.points_per_patch, fit_type=trainopt.fit_type,
+            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
                                                 use_point_stn=trainopt.use_point_stn,
                                                 use_feat_stn=trainopt.use_feat_stn, point_tuple=trainopt.point_tuple,
                                                 sym_op=trainopt.sym_op, arch=trainopt.arch,
                                                 n_gaussians=trainopt.n_gaussians, jet_order=trainopt.jet_order,
-                                                concat_prf=trainopt.concat_prf,
                                                 weight_mode=trainopt.weight_mode).cuda()
-        elif trainopt.arch == 'res':
-            regressor = DeepFitNormals.ResPointNet(1, fit_type=trainopt.fit_type).cuda()
-        elif trainopt.arch == 'pcpnet_res':
-            regressor = PCPNetRes(
-                num_points=trainopt.points_per_patch,
-                output_dim=3,
-                use_point_stn=trainopt.use_point_stn,
-                use_feat_stn=trainopt.use_feat_stn,
-                sym_op=trainopt.sym_op,
-                point_tuple=trainopt.point_tuple)
-        elif trainopt.arch == 'experts':
-            regressor = DeepFitNormalsExperts.DeepFitExperts(trainopt.points_per_patch, fit_type=trainopt.fit_type,
-                                                         use_point_stn=trainopt.use_point_stn, use_feat_stn=trainopt.use_feat_stn,
-                                                         point_tuple=trainopt.point_tuple, sym_op=trainopt.sym_op, arch='3dmfv',
-                                                         n_gaussians=trainopt.n_gaussians, n_experts=trainopt.n_experts).cuda()
 
         regressor.load_state_dict(torch.load(model_filename))
         regressor.to(device)

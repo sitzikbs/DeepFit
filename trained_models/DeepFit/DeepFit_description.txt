@@ -1,0 +1,2 @@
+Trained model for weighted jet fitting:
+Trained for 3-jet (jet of order 3) and 256 neighboring points

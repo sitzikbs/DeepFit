@@ -11,7 +11,6 @@ def l2_norm(v):
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASELINE_DIR = os.path.dirname(os.path.abspath(__file__))
-# BASE_DIR = os.path.abspath(os.path.join(BASELINE_DIR, os.pardir))
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_path', type=str, default='/home/sitzikbs/Datasets/pcpnet/', help='Relative path to data directory')
@@ -23,8 +22,7 @@ parser.add_argument('--dataset_list', type=str, nargs='+',
                     default=['testset_no_noise', 'testset_low_noise', 'testset_med_noise', 'testset_high_noise',
                               'testset_vardensity_striped', 'testset_vardensity_gradient'],
                     help='choose file lists to run evaluation on')
-# ['testset_no_noise', 'testset_low_noise', 'testset_med_noise', 'testset_high_noise',
-#                              'testset_vardensity_striped', 'testset_vardensity_gradient']
+
 FLAGS = parser.parse_args()
 
 MAP_CURVATURES = FLAGS.map_curvatures
@@ -84,8 +82,6 @@ for dataset in dataset_list:
             params = pickle.load(open(results_path + 'parameters.p', "rb"))
             n_experts = params.n_experts
 
-        # points_idx = np.random.choice(range(0, 100000), 5000)
-
         n_points = points.shape[0]
         n_curvatures = curvatures_results.shape[0]
 
@@ -116,7 +112,6 @@ for dataset in dataset_list:
         curvatures_results = curvatures_results * np.tile(sign, [2, 1]).transpose()
 
         if MAP_CURVATURES: #first column maximum, second minimum
-            # curvatures_gt = utils.map_curvatures(curvatures_gt)
             curvatures_results = utils.map_curvatures(curvatures_results)  # for pcpnet
 
 
@@ -130,13 +125,12 @@ for dataset in dataset_list:
         rms_tanh_shape = np.sqrt(np.nanmean(
             np.square(np.tanh(expanssion_coeff * curvatures_results) - np.tanh(expanssion_coeff * curvatures_gt)),
             axis=0))
+
         # error metrics
         rms_regular.append(rms_regular_shape)
         true_rms_L.append(true_rms_L_shape)
         rms_L.append(rms_L_shape)
         rms_tanh.append(rms_tanh_shape)
-        # Oriented rms
-        # rms_o.append(np.sqrt(np.mean(np.square(np.rad2deg(np.arccos(nn))))))
 
 
     avg_rms_regular = np.mean(rms_regular, axis=0)
@@ -168,12 +162,7 @@ for dataset in dataset_list:
     log_string('k2 tanh RMS per shape: ' + str(rms_tanh[:, 1]))
     log_string('k1 tanh average RMS: ' + str(avg_rms_tanh[0]))
     log_string('k2 tanh average RMS: ' + str(avg_rms_tanh[1]) + '\n')
-    # log_string('RMS not oriented (shape average): ' + str(avg_rms_o))
 
     LOG_FOUT.close()
 
-# utils.summary_to_csv(outdir, augmentation_name_in_filename=['_no_noise_', '_low_noise_', '_med_noise_',
-#                                                             '_high_noise_', '_vardensity_gradient_',
-#                                                             '_vardensity_striped_']
-#                      , augmentation_name_for_table=['None', '0.00125', '0.006', '0.012', 'Gradient', 'Striped'])
 
