@@ -85,7 +85,7 @@ def fit_Wjet(points, weights, order=2, compute_neighbor_normals=False):
     if order > 1: #remove preconditioning
          beta = torch.matmul(D_inv, beta)
 
-    n_est = torch.nn.functional.normalize(torch.cat([-beta[:, 0:2].squeeze(-1), torch.ones(batch_size, 1, device=x.device)], dim=1), p=2, dim=1)
+    n_est = torch.nn.functional.normalize(torch.cat([-beta[:, 0:2].squeeze(-1), torch.ones(batch_size, 1, device=x.device, dtype=torch.float64)], dim=1), p=2, dim=1)
 
     if compute_neighbor_normals:
         beta_ = beta.squeeze().unsqueeze(1).repeat(1, n_points, 1).unsqueeze(-1)
@@ -439,3 +439,36 @@ class QSTN(nn.Module):
         x = normal_estimation_utils.batch_quat_to_rotmat(x)
 
         return x
+
+
+def compute_principal_curvatures(beta):
+    """
+    given the jet coefficients, compute the principal curvatures and principal directions:
+    the eigenvalues and eigenvectors of the weingarten matrix
+    :param beta: batch of Jet coefficients vector
+    :return: k1, k2, dir1, dir2: batch of principal curvatures and principal directions
+    """
+    with torch.no_grad():
+        if beta.shape[1] < 5:
+            raise ValueError("Can't compute curvatures for jet with order less than 2")
+        else:
+            b1_2 = torch.pow(beta[:, 0], 2)
+            b2_2 = torch.pow(beta[:, 1], 2)
+            #first fundemental form
+            E = (1 + b1_2).view(-1, 1, 1)
+            G = (1 + b2_2).view(-1, 1, 1)
+            F = (beta[:, 1] * beta[:, 0]).view(-1, 1, 1)
+            I = torch.cat([torch.cat([E, F], dim=2), torch.cat([F, G], dim=2)], dim=1)
+            # second fundemental form
+            norm_N0 = torch.sqrt(b1_2 + b2_2 + 1)
+            e = (2*beta[:, 2] / norm_N0).view(-1, 1, 1)
+            f = (beta[:, 4] / norm_N0).view(-1, 1, 1)
+            g = (2*beta[:, 3] / norm_N0).view(-1, 1, 1)
+            II = torch.cat([torch.cat([e, f], dim=2), torch.cat([f, g], dim=2)], dim=1)
+
+            M_weingarten = -torch.bmm(torch.inverse(I), II)
+
+            curvatures, dirs = torch.symeig(M_weingarten, eigenvectors=True) #faster
+            dirs = torch.cat([dirs, torch.zeros(dirs.shape[0], 2, 1, device=dirs.device)], dim=2) # pad zero in the normal direction
+
+    return curvatures, dirs

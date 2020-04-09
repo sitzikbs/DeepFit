@@ -140,7 +140,7 @@ def test_n_est(opt):
             with torch.no_grad():
                 if trainopt.arch == 'simple' or trainopt.arch == 'res' or trainopt.arch == '3dmfv':
                     start_time = time.time()
-                    n_est, beta_pred, weights, n_res, trans, _, _, _ = regressor(points, n_effective_points)
+                    n_est, beta_pred, weights, trans, trans2, neighbor_normals = regressor(points, n_effective_points)
                     end_time = time.time()
 
             print("elapsed_time per point: {} ms", 1000*(end_time-start_time) / opt.batchSize)
@@ -149,8 +149,6 @@ def test_n_est(opt):
                 # transform predictions with inverse transform
                 # since we know the transform to be a rotation (QSTN), the transpose is the inverse
                 n_est[:, :] = torch.bmm(n_est.unsqueeze(1), trans.transpose(2, 1)).squeeze(dim=1)
-
-
 
             if trainopt.use_pca:
                 # transform predictions with inverse pca rotation (back to world space)
@@ -169,8 +167,6 @@ def test_n_est(opt):
                 normal_prop[shape_patch_offset:shape_patch_offset + min(shape_patches_remaining,
                                                                         batch_patches_remaining), :] = \
                     n_est[batch_offset:batch_offset + min(shape_patches_remaining, batch_patches_remaining), :]
-
-
 
                 batch_offset = batch_offset + min(shape_patches_remaining, batch_patches_remaining)
                 shape_patch_offset = shape_patch_offset + min(shape_patches_remaining, batch_patches_remaining)

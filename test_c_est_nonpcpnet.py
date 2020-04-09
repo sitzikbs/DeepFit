@@ -26,10 +26,9 @@ def parse_arguments():
     # naming / file handling
     parser.add_argument('--indir', type=str, default='/home/sitzikbs/Datasets/NYU_V2/', help='input folder (point clouds)')
     parser.add_argument('--testset', type=str, default='testset_all.txt', help='shape set file name')
-    parser.add_argument('--models', type=str, default='Deepfit_knn_lr0.001_sigmoid_cr_log_d3_p256_Lsin', help='names of trained models, can evaluate multiple models')
-    parser.add_argument('--modelpostfix', type=str, default='_model_599.pth', help='model file postfix')
-    parser.add_argument('--logdir', type=str, default='./log/jetnet_nci_new3/ablations/', help='model folder')
-    # parser.add_argument('--modeldir', type=str, default='./log/debug/trained_models/', help='model folder')
+    parser.add_argument('--models', type=str, default='DeepFit', help='names of trained models, can evaluate multiple models')
+    parser.add_argument('--modelpostfix', type=str, default='.pth', help='model file postfix')
+    parser.add_argument('--logdir', type=str, default='./trained_models/', help='model folder')
     parser.add_argument('--parmpostfix', type=str, default='_params.pth', help='parameter file postfix')
     parser.add_argument('--gpu_idx', type=int, default=0, help='set < 0 to use CPU')
 
@@ -61,7 +60,7 @@ def test_n_est(opt):
     for model_name in opt.models:
 
         # append model name to output directory and create directory if necessary
-        model_log_dir =  os.path.join(opt.logdir, model_name, 'trained_models')
+        model_log_dir =  os.path.join(opt.logdir, model_name)
         model_filename = os.path.join(model_log_dir, model_name+opt.modelpostfix)
         param_filename = os.path.join(model_log_dir, model_name+opt.parmpostfix)
         output_dir = os.path.join(opt.logdir, model_name, 'results/non_pcpnet/' + str(opt.points_per_patch)+'/')
@@ -85,35 +84,19 @@ def test_n_est(opt):
         dataloader, dataset, datasampler = get_data_loaders(opt, trainopt, target_features)
 
         if trainopt.arch == 'simple':
-            regressor = DeepFitNormals.SimpPointNet(1, num_points=trainopt.points_per_patch, fit_type=trainopt.fit_type,
+            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
                                                     use_point_stn=trainopt.use_point_stn,
                                                     use_feat_stn=trainopt.use_feat_stn, point_tuple=1,
                                                     sym_op=trainopt.sym_op, jet_order=trainopt.jet_order,
-                                                    concat_prf=trainopt.concat_prf,
+
                                                     weight_mode=trainopt.weight_mode).cuda()
         elif trainopt.arch == '3dmfv':
-            regressor = DeepFitNormals.SimpPointNet(1, num_points=trainopt.points_per_patch, fit_type=trainopt.fit_type,
+            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
                                                 use_point_stn=trainopt.use_point_stn,
                                                 use_feat_stn=trainopt.use_feat_stn, point_tuple=trainopt.point_tuple,
                                                 sym_op=trainopt.sym_op, arch=trainopt.arch,
                                                 n_gaussians=trainopt.n_gaussians, jet_order=trainopt.jet_order,
-                                                concat_prf=trainopt.concat_prf,
                                                 weight_mode=trainopt.weight_mode).cuda()
-        elif trainopt.arch == 'res':
-            regressor = DeepFitNormals.ResPointNet(1, fit_type=trainopt.fit_type).cuda()
-        elif trainopt.arch == 'pcpnet_res':
-            regressor = PCPNetRes(
-                num_points=trainopt.points_per_patch,
-                output_dim=3,
-                use_point_stn=trainopt.use_point_stn,
-                use_feat_stn=trainopt.use_feat_stn,
-                sym_op=trainopt.sym_op,
-                point_tuple=trainopt.point_tuple)
-        elif trainopt.arch == 'experts':
-            regressor = DeepFitNormalsExperts.DeepFitExperts(trainopt.points_per_patch, fit_type=trainopt.fit_type,
-                                                         use_point_stn=trainopt.use_point_stn, use_feat_stn=trainopt.use_feat_stn,
-                                                         point_tuple=trainopt.point_tuple, sym_op=trainopt.sym_op, arch='3dmfv',
-                                                         n_gaussians=trainopt.n_gaussians, n_experts=trainopt.n_experts).cuda()
 
         regressor.load_state_dict(torch.load(model_filename))
         regressor.to(device)
@@ -155,12 +138,7 @@ def test_n_est(opt):
 
             with torch.no_grad():
                 if trainopt.arch == 'simple' or trainopt.arch == 'res' or trainopt.arch == '3dmfv':
-                    n_est, beta_pred, weights, n_res, trans, _, _, _ = regressor(points, n_effective_points)
-                elif trainopt.arch =='pcpnet_res':
-                    n_est, trans, _, _, n_res = regressor(points)
-                elif trainopt.arch == 'experts':
-                    n_est, beta_pred, weights, n_res, trans, trans2, expert_prob, expert_normals = regressor(points,
-                                                                                                        n_effective_points)
+                    n_est, beta_pred, weights, n_res, trans, trans2, neighbor_normals = regressor(points, n_effective_points)
 
 
             if trainopt.use_point_stn:
@@ -172,12 +150,8 @@ def test_n_est(opt):
                 # transform predictions with inverse pca rotation (back to world space)
                 n_est[:, :] = torch.bmm(n_est.unsqueeze(1), data_trans.transpose(2, 1)).squeeze(dim=1)
 
-            # sign = torch.sign(torch.matmul(n_est.unsqueeze(-1).permute(0, 2, 1), target[0].unsqueeze(-1)).squeeze())  # orient the surface
-            # sign.unsqueeze(-1).repeat(1, beta_pred.shape[1]) *
-
             curvatures, principal_dirs = normal_estimation_utils.compute_principal_curvatures(beta_pred)
-            # curvatures = curvatures / dataset.patch_radius_absolute[shape_ind][0] #fix for k nearest
-            # curvatures = curvatures / scale_radius
+
             curvatures = curvatures / scale_radius.unsqueeze(-1).repeat(1, curvatures.shape[1])
             if trainopt.use_point_stn:
                 # transform predictions with inverse transform

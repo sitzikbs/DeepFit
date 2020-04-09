@@ -411,15 +411,7 @@ def compute_principal_curvatures(beta):
             II = torch.cat([torch.cat([e, f], dim=2), torch.cat([f, g], dim=2)], dim=1)
 
             M_weingarten = -torch.bmm(torch.inverse(I), II)
-            # curvatures = []
-            # dirs = []
-            # for b in range(M_weingarten.shape[0]):
-            #     b_curvatures, b_dirs = torch.eig(M_weingarten[b], eigenvectors=True)
-            #     curvatures.append(b_curvatures[:, 0])
-            #     dirs.append(b_dirs)
 
-            # curvatures = torch.stack(curvatures)
-            # dirs = torch.stack(dirs)
             curvatures, dirs = torch.symeig(M_weingarten, eigenvectors=True) #faster
             dirs = torch.cat([dirs, torch.zeros(dirs.shape[0], 2, 1, device=dirs.device)], dim=2) # pad zero in the normal direction
 
