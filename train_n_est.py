@@ -36,8 +36,8 @@ def parse_arguments():
     parser.add_argument('--trainset', type=str, default='trainingset_temp.txt', help='training set file name')
     parser.add_argument('--testset', type=str, default='validationset_no_noise.txt', help='test set file name')
     parser.add_argument('--saveinterval', type=int, default='10', help='save model each n epochs')
-    parser.add_argument('--refine', action="store_true", help='flag to refine the model')
-    parser.add_argument('--refine_epoch', type=int, default=500, help='refine model at this path')
+    parser.add_argument('--refine', action="store_true", help='flag to refine the model, path determined by outri and model name')
+    parser.add_argument('--refine_epoch', type=int, default=500, help='refine model from this epoch')
     parser.add_argument('--overwrite', action="store_true", help='to overwrite existing log directory')
     parser.add_argument('--gpu_idx', type=int, default=0, help='set < 0 to use CPU')
 

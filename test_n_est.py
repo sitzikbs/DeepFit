@@ -14,7 +14,7 @@ from pathlib import Path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR_PATH = Path(BASE_DIR)
 sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR_PATH.parent, 'models'))
+sys.path.append(os.path.join(BASE_DIR_PATH, 'models'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
 from dataset import PointcloudPatchDataset, SequentialShapeRandomPointcloudPatchSampler, RandomPointcloudPatchSampler, SequentialPointcloudPatchSampler
 
@@ -75,6 +75,9 @@ def test_n_est(opt):
         trainopt = torch.load(param_filename)
         if not hasattr(trainopt, 'arch'):
             trainopt.arch = 'simple'
+
+	if opt.batchSize == 0:
+            opt.batchSize = trainopt.batchSize
 
         # get indices in targets and predictions corresponding to each output
         target_features, output_target_ind, output_pred_ind, output_loss_weight, pred_dim = get_target_features((trainopt))

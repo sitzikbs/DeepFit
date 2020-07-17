@@ -5,8 +5,6 @@ clc
 addpath('/home/sitzikbs/Datasets/NYU_V2/toolbox') % path to nyu v2 toolbox
 data_path = '/home/sitzikbs/Datasets/NYU_V2/';
 results_path = '/mnt/sitzikbs_storage/PycharmProjects/DeepFit3D/Normal_Estimation/log/jetnet_nci_new3/ablations/Deepfit_knn_lr0.001_sigmoid_cr_log_d3_p256_Lsin/results/non_pcpnet/128/';
-% results_path = '/mnt/sitzikbs_storage/PycharmProjects/DeepFit3D/Normal_Estimation/log/baselines/jet/128_neighbors/';
-% results_path = '/mnt/sitzikbs_storage/PycharmProjects/DeepFit3D/Normal_Estimation/cgal_cpp/results/cgal/jet_1024/';
 output_path = [results_path, 'images/'];
 
 export_type = 'all'; % set to 'all' to export all files in the results firectory

@@ -1,3 +1,4 @@
+# Download pcpnet data
 import os
 import zipfile
 import urllib.request
@@ -42,5 +43,4 @@ def get_point_clouds_and_models_from_repo(repo_url):
     os.system('git clone %s' % (repo_url))
 
 if __name__ == '__main__':
-
     get_pcpnet_point_clouds()

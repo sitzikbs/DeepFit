@@ -85,7 +85,7 @@ def fit_Wjet(points, weights, order=2, compute_neighbor_normals=False):
     if order > 1: #remove preconditioning
          beta = torch.matmul(D_inv, beta)
 
-    n_est = torch.nn.functional.normalize(torch.cat([-beta[:, 0:2].squeeze(-1), torch.ones(batch_size, 1, device=x.device, dtype=torch.float64)], dim=1), p=2, dim=1)
+    n_est = torch.nn.functional.normalize(torch.cat([-beta[:, 0:2].squeeze(-1), torch.ones(batch_size, 1, device=x.device, dtype=beta.dtype)], dim=1), p=2, dim=1)
 
     if compute_neighbor_normals:
         beta_ = beta.squeeze().unsqueeze(1).repeat(1, n_points, 1).unsqueeze(-1)
@@ -267,11 +267,11 @@ class PointNet3DmFVEncoder(nn.Module):
         return torch.cat([x, pointfeat], 1), global_feature.squeeze(), trans, trans2, points
 
 
-class SimpPointNet(nn.Module):
-    def __init__(self, k=2, num_points=500, use_point_stn=False,  use_feat_stn=False, point_tuple=1,
+class DeepFit(nn.Module):
+    def __init__(self, k=1, num_points=500, use_point_stn=False,  use_feat_stn=False, point_tuple=1,
                  sym_op='max', arch=None, n_gaussians=5, jet_order=2, weight_mode="tanh",
                  use_consistency=False):
-        super(SimpPointNet, self).__init__()
+        super(DeepFit, self).__init__()
         self.k = k  # k is the number of weights per point e.g. 1
         self.num_points=num_points
         self.point_tuple = point_tuple
@@ -298,7 +298,7 @@ class SimpPointNet(nn.Module):
         self.do = torch.nn.Dropout(0.25)
 
 
-    def forward(self, points, n_effective_points):
+    def forward(self, points):
 
         x, _, trans, trans2, points = self.feat(points)
         x = F.relu(self.bn1(self.conv1(x)))

@@ -1,11 +1,7 @@
 import numpy as np
 import torch
+import scipy.interpolate
 import scipy.spatial as spatial
-
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-import ipyvolume as ipv
 
 class SinglePointCloudDataset():
     def __init__(self, point_filename, points_per_patch):
@@ -27,7 +23,7 @@ class SinglePointCloudDataset():
         patch_points = patch_points / rad
 
         patch_points, trans = self.pca_points(patch_points)
-        return torch.transpose(patch_points, 0, 1), trans
+        return torch.transpose(patch_points, 0, 1), trans, rad
 
     def __len__(self):
         return self.points.shape[0]
@@ -108,14 +104,14 @@ class SyntheticPointCloudDataset():
     def __getitem__(self, index):
         point_distances, patch_point_inds = self.kdtree.query(self.points[index, :], k=self.points_per_patch)
         rad = max(point_distances)
-        patch_points = torch.from_numpy(self.points[patch_point_inds, :])
+        patch_points = torch.tensor(self.points[patch_point_inds, :], dtype=torch.float32)
 
         # center the points around the query point and scale patch to unit sphere
-        patch_points = patch_points - torch.from_numpy(self.points[index, :])
+        patch_points = patch_points - torch.tensor(self.points[index, :], dtype=torch.float32)
         patch_points = patch_points / rad
 
         # patch_points, trans = self.pca_points(patch_points) # the data is generated aligned to z
-        return torch.transpose(patch_points, 0, 1)
+        return torch.transpose(patch_points, 0, 1), rad
 
     def __len__(self):
         return self.points.shape[0]
@@ -232,12 +228,97 @@ class SyntheticPointCloudDataset():
         return M
 
 
+def compute_principal_curvatures(beta):
+    """
+    given the jet coefficients, compute the principal curvatures and principal directions:
+    the eigenvalues and eigenvectors of the weingarten matrix
+    :param beta: batch of Jet coefficients vector
+    :return: k1, k2, dir1, dir2: batch of principal curvatures and principal directions
+    """
+    with torch.no_grad():
+        if beta.shape[1] < 5:
+            raise ValueError("Can't compute curvatures for jet with order less than 2")
+        else:
+            b1_2 = torch.pow(beta[:, 0], 2)
+            b2_2 = torch.pow(beta[:, 1], 2)
+            #first fundemental form
+            E = (1 + b1_2).view(-1, 1, 1)
+            G = (1 + b2_2).view(-1, 1, 1)
+            F = (beta[:, 1] * beta[:, 0]).view(-1, 1, 1)
+            I = torch.cat([torch.cat([E, F], dim=2), torch.cat([F, G], dim=2)], dim=1)
+            # second fundemental form
+            norm_N0 = torch.sqrt(b1_2 + b2_2 + 1)
+            e = (2*beta[:, 2] / norm_N0).view(-1, 1, 1)
+            f = (beta[:, 4] / norm_N0).view(-1, 1, 1)
+            g = (2*beta[:, 3] / norm_N0).view(-1, 1, 1)
+            II = torch.cat([torch.cat([e, f], dim=2), torch.cat([f, g], dim=2)], dim=1)
+
+            M_weingarten = -torch.bmm(torch.inverse(I), II)
+
+            curvatures, dirs = torch.symeig(M_weingarten, eigenvectors=True)
+            dirs = torch.cat([dirs, torch.zeros(dirs.shape[0], 2, 1, device=dirs.device)], dim=2) # pad zero in the normal direction
+
+    return curvatures, dirs
+
+
 def normal2rgb(normals):
+    '''
+    map normal vectors to RGB cube
+    Args:
+        normals : normal vectors
+
+    Returns:
+        mapped normals to rgb
+    '''
     r = np.clip(np.expand_dims((127.5 + 127.5 * normals[:, 0]) / 255, -1), 0, 1)
     g = np.clip(np.expand_dims((127.5 + 127.5 * normals[:, 1]) / 255, -1), 0, 1)
     b = np.clip(np.expand_dims((127.5 + 127.5 * normals[:, 2]) / 255, -1), 0, 1)
     return np.concatenate([r, g, b], 1)
 
+
+def curvatures2rgb(curvatures,  k1_range=[-1, 1], k2_range=[-1, 1]):
+    '''
+    map principal curvature to RGB values
+    Args:
+        curvatures : principal vectors
+        k1_range : range of maximal principal curvatures
+        k2_range : range of minimal principal curvatures
+    Returns:
+        mapped normals to rgb
+    '''
+    k1min = k1_range[0]
+    k1max = k1_range[1]
+    k2min = k2_range[0]
+    k2max = k2_range[1]
+    mapped_curvatures = curvatures
+    mapped_curvatures[mapped_curvatures[:, 0] > k1max, 0] = k1max
+    mapped_curvatures[mapped_curvatures[:, 0] < k1min, 0] = k1min
+    mapped_curvatures[mapped_curvatures[:, 1] > k2max, 1] = k2max
+    mapped_curvatures[mapped_curvatures[:, 1] < k2min, 1] = k2min
+
+
+    # [X, Y] = np.meshgrid([k1min, 0, k1max], [k2min, 0, k2max])
+
+    red_dist = np.array([[0, 0.5, 0],  [0.5, 1, 1], [0, 1, 1]])
+    green_dist = np.array([[0,  1, 1], [1, 1, 1],   [1, 1, 0]])
+    blue_dist = np.array([[1, 1, 0],   [1, 1, 0.5], [0, 0.5, 0]])
+
+    Xq, Yq = mapped_curvatures[:, 0],  mapped_curvatures[:, 1]
+
+    kx, ky = 1, 1 #interpulation params
+
+    red_mapper = scipy.interpolate.RectBivariateSpline(np.array([k1min, 0, k1max]), np.array([k2min, 0, k2max]),
+                                                       red_dist, kx=kx, ky=ky)
+    green_mapper = scipy.interpolate.RectBivariateSpline(np.array([k1min, 0, k1max]), np.array([k2min, 0, k2max]),
+                                                       green_dist, kx=kx, ky=ky)
+    blue_mapper = scipy.interpolate.RectBivariateSpline(np.array([k1min, 0, k1max]), np.array([k2min, 0, k2max]),
+                                                       blue_dist, kx=kx, ky=ky)
+
+    r = np.around(red_mapper.ev(Xq, Yq), 4)
+    g = np.around(green_mapper.ev(Xq, Yq), 4)
+    b = np.around(blue_mapper.ev(Xq, Yq), 4)
+
+    return np.concatenate([np.expand_dims(r, -1), np.expand_dims(g, -1), np.expand_dims(b, -1)], 1)
 
 if __name__ == "__main__":
     dataset = SyntheticPointCloudDataset(n_points=128, jet_order=1, points_per_patch=128)

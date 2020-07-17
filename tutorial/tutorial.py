@@ -1,3 +1,4 @@
+# consider deleting - maybe fuplicate of compute_normals.py
 import sys
 sys.path.insert(0, '../utils')
 sys.path.insert(0, '../models')
