@@ -1,0 +1,342 @@
+ul.navbar-nav {
+  font-size: 15px;
+}
+@media (max-width:1000px) {
+	ul.navbar-nav {
+		font-size: 10px;
+	}
+	h1 {font-size: 24px !important;}
+	h2 {font-size: 20px !important;}
+}
+
+body {
+  font-size: 16px;
+  line-height: 23px;
+  font-weight: 300;
+  -webkit-font-smoothing: subpixel-antialiased;
+  color: #333;
+  padding-top: 0px;
+}
+
+body *::selection {
+  background: #e67e22;
+  color: #fff;
+}
+
+.container {
+  max-width: 980px;
+}
+
+.top-strip {
+  background-color: #000;
+  height: 0.25em;
+  width: 100%;
+}
+
+h1,h2,h3 {
+  color: #1a1a1a;
+  font-weight: 300;
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  line-height: 35px;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 25px;
+  line-height: 30px;
+}
+
+h3 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 25px;
+}
+
+.page-header {
+  margin-top: 20px;
+  /*border-color: #3498db;*/
+}
+
+p.authors {
+  margin-bottom: 5px;
+  color: #808080;
+  font-size: 20px;
+}
+
+p.authors a {
+  border-color: #dedede;
+}
+
+img {
+  max-width: 100%;
+}
+
+p {
+  text-align: justify;
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px solid #ccc;
+  color: inherit;
+}
+
+.navbar a {
+  border-bottom: 0;
+}
+
+p.lead.authors a {
+  border-bottom: none;
+}
+
+a:hover, a:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+.thumb {
+  margin: 20px 0;
+  border: 1px solid #808080;
+}
+
+pre {
+  color: #333;
+  font-size: 12px;
+  line-height: 17px;
+}
+
+#vimeo-embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  height: auto;
+}
+
+#vimeo-embed iframe,
+#vimeo-embed object,
+#vimeo-embed embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+div.speaker {
+  margin: 2em 0;
+}
+
+div.speaker
+div.speaker-pic {
+  text-align: right;
+}
+
+div.speaker p.speaker-abstract,
+div.speaker p.speaker-bio {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+
+#organizers {
+  margin-top: 1em;
+}
+
+.people-pic {
+  max-width: 125px;
+  max-height: 125px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.people-name {
+  margin: 10px 0 10px;
+}
+
+.people-name h6 {
+  margin: 4px 0;
+  font-weight: 300;
+  font-size: 11px;
+}
+@media (max-width:1000px) {
+	div.speaker img.people-pic {
+		max-width: 100px;
+		max-height: 100px;
+	}
+	.people-pic {
+		max-width: 65px;
+		max-height: 65px;
+	}
+	.people-name {
+		font-size: 13px;
+		line-height: 18px;
+	}
+	.people-name h6 {
+		font-size: 9px;
+	}
+}
+
+div.award {
+    padding: 15px 0px 15px 25px;
+}
+div.award h3 {
+	font-size: 15px;
+}
+span.award-sponsor {
+	color: #666;
+	font-size: 13px;
+}
+span.award-sponsor a ,
+span.award-other a {
+	text-decoration: none;
+	border: 0;
+}
+span.award-sponsor img {
+	height: 18px;
+	margin: 0 5px;
+}
+div.award:last-child {
+	padding-top: 30px;
+}
+span.award-other img {
+	height: 18px;
+	margin-top: 2px;
+	vertical-align: top;
+}
+
+#sequence {
+  height: 70px;
+}
+
+#legend {
+  padding: 10px 0 0 3px;
+}
+
+#sequence text, #legend text {
+  font-weight: 300;
+  fill: #fff;
+}
+
+#chart {
+  position: relative;
+  border-right: 1px solid #eee;
+}
+
+#chart path {
+  stroke: #fff;
+}
+
+#explanation {
+  position: absolute;
+  top: 240px;
+  left: 180px;
+  width: 140px;
+  text-align: center;
+  color: #666;
+  z-index: -1;
+}
+
+#percentage {
+  font-size: 2.5em;
+}
+
+
+.sponsor {
+  text-align: center;
+  height: 7rem;
+  display: table;
+}
+
+.sponsor > a {
+  display: table-cell;
+  vertical-align: bottom;
+  border: none;
+}
+
+.sponsor img {
+  max-height: 5rem;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.vid-container {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 56.25%;
+}
+
+.vid-container iframe {
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.table.schedule tr.noline td {
+  border-top: none;
+}
+.table.schedule tr td {
+  padding-top: 0;
+  padding-bottom: 8px;
+}
+
+div.paper {
+  padding: 15px 0px 15px 25px;
+}
+div.paper span.title {
+  display: block;
+  font-size: 18px;
+}
+div.paper span.authors {
+  display: block;
+  font-size: 15px;
+  color: #666;
+  transition: color 0.5s;
+}
+div.paper:hover,
+div.paper:hover span.authors,
+div.paper:hover .btn-default {
+	color: black;
+}
+div.paper span.label {
+	font-size: 10px;
+}
+div.paper div.btn-group {
+  margin-top: 8px;
+}
+div.paper button,
+div.paper .btn {
+  border-radius: 0 !important;
+}
+div.paper .btn {
+	text-transform: none !important;
+	box-shadow: none;
+	border: 1px solid #999;
+	margin-right: -1px;
+	padding: 4px 8px;
+}
+div.paper .btn-default {
+	color: #999;
+}
+div.paper .btn-success,
+div.paper .btn-poster-id {
+	cursor: default;
+}
+div.paper i.fas {
+	margin-right: 4px;
+}
+@media (max-width:1000px) {
+	div.paper span.title {
+		font-size: 15px;
+	}
+	div.paper span.authors {
+		font-size: 13px;
+	}
+}

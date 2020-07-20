@@ -1,6 +1,9 @@
+<link rel="stylesheet" type="text/css" href="css/main.css?1" media="screen,projection">
+
 ***DeepFit***: DeepFit: 3D Surface Fitting via Neural Network Weighted Least Squares (ECCV 2020 Oral)
 ---
 Created by [Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
+
 
 <div style="align=center">
 
