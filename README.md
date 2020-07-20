@@ -6,21 +6,21 @@ Created by [Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com) and [Stephen Goul
 
 <div class="row">
   <div class="col-xs-3">
-    <a href="https://www.itzikbs.com" target="_blank">
-     <img src="doc/ybenshabat.jpg">
+    <a href="https://www.itzikbs.com" target="blank">
+     <img src="doc/ybenshabat.jpg" />
     </a>
     <div class="people-name text-center">
-     <a href="https://www.itzikbs.com" target="_blank">Yizhak (Itzik) Ben-Shabat</a><br>
+     <a href="https://www.itzikbs.com" target="blank">Yizhak (Itzik) Ben-Shabat</a><br>
      ANU and ACRV
     </div>
   </div>
 
   <div class="col-xs-3">
-    <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="_blank">
-      <img src="doc/sgould.jpg">
+    <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="blank">
+      <img src="doc/sgould.jpg" />
     </a>
     <div class="people-name text-center">
-      <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="_blank">Stephen Gould</a><br>
+      <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="blank">Stephen Gould</a><br>
       ANU and ACRV
     </div>
   </div>
