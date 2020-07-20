@@ -1,14 +1,21 @@
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/main.css?1" media="screen,projection">
 
 ***DeepFit***: DeepFit: 3D Surface Fitting via Neural Network Weighted Least Squares (ECCV 2020 Oral)
 ---
 Created by [Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
 
-
-![DeepFit_pipeline](doc/DeepFit_Pipeline.png)
+<div style="text-align: center;">
+  <a href="https://www.itzikbs.com/" target="blank">
+    <img src="doc/ybenshabat.jpg" alt="Yizhak Ben-Shabat (Itzik)">
+  </a>
+  <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="blank">
+    <img src="doc/sgould.jpg" alt="Stephen Gould">
+  </a>
+</div>
 
 ### Introduction
-
+![DeepFit_pipeline](doc/DeepFit_Pipeline.png)
 This is the code for unstructured 3D point cloud surface fitting using DeepFit.
 It allows to train, test and evaluate our weight prediction models for weighted least squares in the context of normal estimation and principal curvature estimation.
 We provide the code for train a model or use a pretrained model on your own data.
