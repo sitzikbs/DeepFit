@@ -2,6 +2,9 @@
 ---
 Created by [Yizhak (Itzik) Ben-Shabat](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
 
+<kbd><img src=".https://github.com/sitzikbs/DeepFit/blob/master/doc/ybenshsbat.jpg" /></kbd>
+<kbd><img src="https://github.com/sitzikbs/DeepFit/blob/master/doc/sgould.jpg" /></kbd>
+
 ![DeepFit_pipeline](https://github.com/sitzikbs/DeepFit/blob/master/doc/DeepFit_Pipeline.png)
 
 ### Introduction
