@@ -4,15 +4,29 @@
 ---
 Created by [Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
 
+<div class="row">
+  <div class="col-xs-3">
+    <a href="https://www.itzikbs.com" target="_blank">
+     <img src="doc/ybenshabat.jpg">
+    </a>
+    <div class="people-name text-center">
+     <a href="https://www.itzikbs.com" target="_blank">Yizhak (Itzik) Ben-Shabat</a><br>
+     ANU and ACRV
+    </div>
+  </div>
 
-<div style="align=center">
-
-![Yizhak Ben-Shabat](https://github.com/sitzikbs/DeepFit/blob/master/doc/ybenshabat.jpg)
-*[Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com)*
-![Stephen Gould](https://github.com/sitzikbs/DeepFit/blob/master/doc/sgould.jpg)
-*[Stephen Gould](http://users.cecs.anu.edu.au/~sgould/)*
+  <div class="col-xs-3">
+    <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="_blank">
+      <img src="doc/sgould.jpg">
+    </a>
+    <div class="people-name text-center">
+      <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="_blank">Stephen Gould</a><br>
+      ANU and ACRV
+    </div>
+  </div>
 </div>
-![DeepFit_pipeline](https://github.com/sitzikbs/DeepFit/blob/master/doc/DeepFit_Pipeline.png)
+
+![DeepFit_pipeline](doc/DeepFit_Pipeline.png)
 
 ### Introduction
 
