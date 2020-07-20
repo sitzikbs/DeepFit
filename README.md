@@ -4,26 +4,6 @@
 ---
 Created by [Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
 
-<div class="row">
-  <div class="col-xs-3">
-    <a href="https://www.itzikbs.com" target="blank">
-     <img src="doc/ybenshabat.jpg" />
-    </a>
-    <div class="people-name text-center">
-     <a href="https://www.itzikbs.com" target="blank">Yizhak (Itzik) Ben-Shabat</a><br>
-     ANU and ACRV
-    </div>
-  </div>
-  <div class="col-xs-3">
-    <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="blank">
-      <img src="doc/sgould.jpg" />
-    </a>
-    <div class="people-name text-center">
-      <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="blank">Stephen Gould</a><br>
-      ANU and ACRV
-    </div>
-  </div>
-</div>
 
 ![DeepFit_pipeline](doc/DeepFit_Pipeline.png)
 
