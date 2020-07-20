@@ -1,10 +1,14 @@
 ***DeepFit***: DeepFit: 3D Surface Fitting via Neural Network Weighted Least Squares (ECCV 2020 Oral)
 ---
-Created by [Yizhak (Itzik) Ben-Shabat](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
+Created by [Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
 
-<kbd><div style="max-width: 125px;  max-height: 125px;  border:1px solid white; border-radius:50%;  padding: 0;" ><img src="https://github.com/sitzikbs/DeepFit/blob/master/doc/ybenshabat.jpg" /></div></kbd>
-<kbd><div style="max-width: 125px;  max-height: 125px;  border:1px solid white; border-radius:50%;  padding: 0;" ><img src="https://github.com/sitzikbs/DeepFit/blob/master/doc/sgould.jpg"/></div></kbd>
+<div style="align=center">
 
+![Yizhak Ben-Shabat](https://github.com/sitzikbs/DeepFit/blob/master/doc/ybenshabat.jpg)
+*[Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com)*
+![Stephen Gould](https://github.com/sitzikbs/DeepFit/blob/master/doc/sgould.jpg)
+*[Stephen Gould](http://users.cecs.anu.edu.au/~sgould/)*
+</div>
 ![DeepFit_pipeline](https://github.com/sitzikbs/DeepFit/blob/master/doc/DeepFit_Pipeline.png)
 
 ### Introduction
