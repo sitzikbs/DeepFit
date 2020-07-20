@@ -14,7 +14,6 @@ Created by [Yizhak Ben-Shabat (Itzik)](http://www.itzikbs.com) and [Stephen Goul
      ANU and ACRV
     </div>
   </div>
-
   <div class="col-xs-3">
     <a href="https://cecs.anu.edu.au/people/stephen-gould/" target="blank">
       <img src="doc/sgould.jpg" />
