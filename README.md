@@ -43,7 +43,8 @@ If you find our work useful in your research, please cite our paper:
 
 Install [PyTorch](https://pytorch.org/).
 
-The code was tested with Python 3.7.3, torch 1.4.0, torchvision 0.4.2, CUDA 10.1.243, and cuDNN 7605 on Ubuntu 18.04.
+The code was tested with Python 3.7.3, torch 1.4.0, torchvision 0.5.0, CUDA 10.1.243, and cuDNN 7605 on Ubuntu 18.04.
+For a full list of requirements see `requirements.txt`.
 
 #####  2. Estimate normal vectors for your data:
 
