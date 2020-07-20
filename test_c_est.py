@@ -1,3 +1,7 @@
+# test_c_est.py test a pretrained DeepFit model and export all estimated parameters
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 from __future__ import print_function
 import argparse
 import os
@@ -18,6 +22,7 @@ from dataset import PointcloudPatchDataset, SequentialShapeRandomPointcloudPatch
 import DeepFit
 import normal_estimation_utils
 
+# Exection
 # python3 test_c_est.py --models 'Deepfit_knn_lr0.001_sigmoid_cr_log_d3_p256_Lsin' --logdir './log/jetnet_nci_new3/ablations/' --sparse_patches 1 --testset 'testset_all.txt'
 
 def parse_arguments():
@@ -29,7 +34,6 @@ def parse_arguments():
     parser.add_argument('--models', type=str, default='Deepfit_knn_lr0.001_sigmoid_cr_log_d3_p256_Lsin', help='names of trained models, can evaluate multiple models')
     parser.add_argument('--modelpostfix', type=str, default='_model_599.pth', help='model file postfix')
     parser.add_argument('--logdir', type=str, default='./log/jetnet_nci_new2/ablations/', help='model folder')
-    # parser.add_argument('--modeldir', type=str, default='./log/debug/trained_models/', help='model folder')
     parser.add_argument('--parmpostfix', type=str, default='_params.pth', help='parameter file postfix')
     parser.add_argument('--gpu_idx', type=int, default=0, help='set < 0 to use CPU')
 

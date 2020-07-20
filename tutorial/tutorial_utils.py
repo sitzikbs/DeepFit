@@ -1,3 +1,7 @@
+# tutorial_utils.py utility functions for the tutorial
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 import numpy as np
 import torch
 import scipy.interpolate
@@ -27,45 +31,6 @@ class SinglePointCloudDataset():
 
     def __len__(self):
         return self.points.shape[0]
-
-    # def plot_point_cloud(self, color, xlimit=[-1, 1], ylimit=[-1, 1], zlimit=[-1, 1], c_range=[-1, 1], scale= 20,
-    #                      colormap='jet'):
-    #     '''
-    #     scatter plot point cloud
-    #     Args:
-    #         color: vector of values for coloring the points (n_pointsx1)
-    #     Returns:
-    #     '''
-
-        # ipv.quickscatter(self.points[:, 0], self.points[:, 1], self.points[:, 2], size=scale, marker="sphere", color='r')
-
-        # if self.pc_plot is None:
-        # fig = plt.figure()
-        # ax = fig.add_subplot(111, projection='3d')
-        #
-        # cmap = cm.get_cmap(colormap, 256)
-        # self.pc_plot = plt.scatter(self.points[:, 0], self.points[:, 1], zs=self.points[:, 2], s=scale, c=color,
-        #                            cmap=cmap, depthshade=False)
-        # plt.clim(c_range[0], c_range[1])
-        # cbar = plt.colorbar()
-        # cbar.set_label('point weight')
-        #
-        # rng = 1
-        # ax.auto_scale_xyz([-rng, rng], [-rng, rng], [-rng, rng])
-        # ax.set_xlim(xlimit[0], xlimit[1])
-        # ax.set_ylim(ylimit[0], ylimit[1])
-        # ax.set_zlim(zlimit[0], zlimit[1])
-        # ax.set_xlabel('X')
-        # ax.set_ylabel('Y')
-        # ax.set_zlabel('Z')
-        # ax.set_axis_off()
-        # ax.view_init(32.64, 45)
-        # plt.show()
-        # else:
-        #     self.pc_plot.c = color
-        #     plt.clim(c_range[0], c_range[1])
-        #     cmap = cm.get_cmap(colormap, 256)
-        #     self.pc_plot.cmap = cmap
 
     def pca_points(self, patch_points):
         '''
@@ -296,9 +261,6 @@ def curvatures2rgb(curvatures,  k1_range=[-1, 1], k2_range=[-1, 1]):
     mapped_curvatures[mapped_curvatures[:, 1] > k2max, 1] = k2max
     mapped_curvatures[mapped_curvatures[:, 1] < k2min, 1] = k2min
 
-
-    # [X, Y] = np.meshgrid([k1min, 0, k1max], [k2min, 0, k2max])
-
     red_dist = np.array([[0, 0.5, 0],  [0.5, 1, 1], [0, 1, 1]])
     green_dist = np.array([[0,  1, 1], [1, 1, 1],   [1, 1, 0]])
     blue_dist = np.array([[1, 1, 0],   [1, 1, 0.5], [0, 0.5, 0]])
@@ -322,4 +284,3 @@ def curvatures2rgb(curvatures,  k1_range=[-1, 1], k2_range=[-1, 1]):
 
 if __name__ == "__main__":
     dataset = SyntheticPointCloudDataset(n_points=128, jet_order=1, points_per_patch=128)
-

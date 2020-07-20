@@ -1,10 +1,8 @@
 DeepFit: DeepFit: 3D Surface Fitting via Neural Network Weighted Least Squares
 
-Copyright (c) 2020, ANU, ACRV
+Copyright (c) 2020, Yizhak Ben-Shabat, ANU, ACRV
 
 The MIT License (MIT)
-
-Copyright (c) 2020 Yizhak Ben-Shabat
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,3 +1,7 @@
+# evaluation_curvatures.py run curvature estimation evaluation
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 import os
 import numpy as np
 import pickle
@@ -164,5 +168,3 @@ for dataset in dataset_list:
     log_string('k2 tanh average RMS: ' + str(avg_rms_tanh[1]) + '\n')
 
     LOG_FOUT.close()
-
-

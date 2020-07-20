@@ -1,3 +1,7 @@
+# evaluation.py run normal estimation evaluation
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 import os
 import numpy as np
 import pickle
@@ -29,9 +33,6 @@ parser.add_argument('--dataset_list', type=str,
                     default=['testset_no_noise', 'testset_low_noise', 'testset_med_noise', 'testset_high_noise',
                               'testset_vardensity_striped', 'testset_vardensity_gradient'], nargs='+',
                     help='list of .txt files containing sets of point cloud names for evaluation')
-# parser.add_argument('--dataset_list', type=str,
-#                     default=['testset_no_noise'], nargs='+',
-#                     help='list of .txt files containing sets of point cloud names for evaluation')
 FLAGS = parser.parse_args()
 EXPORT = False  # export some visualizations
 PC_PATH = os.path.join(BASE_DIR, FLAGS.data_path)
@@ -43,9 +44,6 @@ if not os.path.exists(normal_results_path):
     ValueError('Incorrect normal results path...')
 
 dataset_list = FLAGS.dataset_list
-# dataset_list = ['testset', 'testset_whitenoise_small', 'testset_whitenoise_medium', 'testset_whitenoise_large',
-#                 'testset_vardensity_gradient', 'testset_vardensity_striped']  # list of files with evaluation lists
-# dataset_list = ['testset_temp']
 
 for dataset in dataset_list:
 
@@ -113,19 +111,8 @@ for dataset in dataset_list:
         # load the data
         points = np.loadtxt(os.path.join(normal_gt_path, shape + '.xyz')).astype('float32')
         normals_gt = np.loadtxt(os.path.join(normal_gt_path, shape + '.normals')).astype('float32')
-        # curvs_gt = np.loadtxt(os.path.join(normal_gt_path, shape + '.curv')).astype('float32')
         normals_results = np.loadtxt(os.path.join(normal_results_path, shape + '.normals')).astype('float32')
         points_idx = np.loadtxt(os.path.join(normal_gt_path, shape + '.pidx')).astype('int')
-
-        # if os.path.exists(os.path.join(normal_results_path, shape + '.experts')):
-        #     experts_exist = True
-        #     experts = np.loadtxt(os.path.join(normal_results_path, shape + '.experts'))
-        #     params = pickle.load(open(os.path.join(results_path, 'parameters.p'), "rb"))
-        #     n_experts = params.n_experts
-        #     if EXPORT:
-        #         experts_vis_output_path = os.path.join(vis_output_path, 'experts_labels')
-        #         if not os.path.exists(experts_vis_output_path):
-        #             os.makedirs(experts_vis_output_path)
 
         n_points = points.shape[0]
         n_normals = normals_results.shape[0]
@@ -133,7 +120,6 @@ for dataset in dataset_list:
             sparse_normals = True
         else:
             sparse_normals = False
-        # points_idx = np.random.choice(range(0, 100000), 5000)
 
         points = points[points_idx, :]
         normals_gt = normals_gt[points_idx, :]
@@ -174,32 +160,6 @@ for dataset in dataset_list:
         diff_inv = np.arccos(-nn)
         unoriented_normals = normals_results
         unoriented_normals[diff_inv < diff, :] = -normals_results[diff_inv < diff, :]
-
-        # Visualization
-        # if EXPORT:
-            # #  For additional visualization options see MATALAB visualization code
-            # phi_gt, teta_gt = utils.euclidean_to_spherical(normals_gt)
-            # phi_pred_unoirented, teta_pred_unoirented = utils.euclidean_to_spherical(unoriented_normals)
-            #
-            # filename_pc_gt = os.path.join(gt_normals_vis_output_path, shape + '_pc_normals_gt')
-            # filename_pc_pred = os.path.join(pred_normals_vis_output_path, shape + '_pc_normals_pred')
-            # filename_phi_teta = os.path.join(phi_teta_vis_output_path, shape + '_phi_theta_domain')
-            # footnote = 'RMS unoriented= ' + str(rms[i]) + ', PGP5= ' + str(pgp5[i]) + ', PGP10= ' + str(pgp10[i])
-            # points = points - np.tile(np.mean(points, axis=0), [points.shape[0], 1])
-            #
-            # ax = visualization.draw_phi_teta_domain(phi_gt, teta_gt, color='k', display=False, export=True, format='png',
-            #                                         filename='phi_teta_gt', title=r'$\theta(\phi)$'+' '+shape)
-            # visualization.draw_line_segments(phi_gt, teta_gt, phi_pred_unoirented, teta_pred_unoirented, ax=ax, display=False,
-            #                                  export=True, filename=filename_phi_teta, format='png', footnote=footnote)
-            # if experts_exist:
-            #     cmap = visualization.discrete_cmap(n_experts, 'nipy_spectral')
-            #     visualization.draw_phi_teta_domain(phi_pred_unoirented, teta_pred_unoirented, color=experts,
-            #                                        display=False, export=True, format='png',
-            #                                        filename=filename_phi_teta, ax=ax,
-            #                                        title=None, cmap=cmap, n_labels=n_experts)
-            # else:
-            #     visualization.draw_phi_teta_domain(phi_pred_unoirented, teta_pred_unoirented, color='r', display=False,
-            #                                        export=True, format='png', filename='phi_teta_pred', ax=ax, title=None)
 
     avg_rms = np.mean(rms)
     avg_rms_o = np.mean(rms_o)

@@ -1,3 +1,8 @@
+# visualization.py utility visualization functions.
+# For normal vector visualization use MATLAB code
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 

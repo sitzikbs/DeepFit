@@ -1,3 +1,7 @@
+# normal_estimation_utils.py normal estimation and 3DmFV utility functions
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import normalize
 import os
@@ -427,6 +431,3 @@ if __name__ == "__main__":
     points = np.tile(np.expand_dims(points,0),[128,1,1])
 
     fv_gpu = get_fisher_vectors(points,gmm, normalization=True)
-
-
-

@@ -1,3 +1,7 @@
+# cgal_normal_estimation.py cgal normal estimation baselines
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 from __future__ import print_function
 from CGAL.CGAL_Kernel import Point_3
 from CGAL.CGAL_Kernel import Vector_3

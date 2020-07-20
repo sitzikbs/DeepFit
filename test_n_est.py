@@ -1,3 +1,7 @@
+# test_n_est.py run a pretrained DeepFit model and export the normal estimation output
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 from __future__ import print_function
 import argparse
 import os
@@ -18,7 +22,7 @@ sys.path.append(os.path.join(BASE_DIR_PATH, 'models'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
 from dataset import PointcloudPatchDataset, SequentialShapeRandomPointcloudPatchSampler, RandomPointcloudPatchSampler, SequentialPointcloudPatchSampler
 
-
+# Execution
 # python3 test_n_est.py --models 'Deepfit_simple_sigmoid_cr_log_d1_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d2_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d3_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d4_p64_Lsin' 'Deepfit_simple_sigmoid_cr_log_d4_p128_Lsin' 'Deepfit_simple_sigmoid_cr_log_d3_p128_Lsin' 'Deepfit_simple_sigmoid_cr_log_d2_p128_Lsin' --logdir './log/jetnet_nci_new3/ablations/' --sparse_patches 1 --testset 'testset_all.txt'
 
 def parse_arguments():
@@ -56,7 +60,6 @@ def test_n_est(opt):
 
     for model_name in opt.models:
        # fetch the model from the log dir
-
 
         # append model name to output directory and create directory if necessary
         model_log_dir =  os.path.join(opt.logdir, model_name, 'trained_models')

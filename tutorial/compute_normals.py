@@ -1,3 +1,7 @@
+# compute_normals.py run normal estimation for a single point cloud using a pretrained DeepFit model and export the results
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 # compute normal vectors of a single point cloud
 import sys
 import os

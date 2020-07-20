@@ -1,3 +1,7 @@
+# run_DeepFit_single_experiment.py run a full train, test, evaluate for given parameters 
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 # train, test and evaluate DeepFit
 import os
 
@@ -41,5 +45,3 @@ os.system('python3 test_n_est.py --testset {} --modelpostfix {} --logdir {} --gp
 print("evaluating {}".format(name))
 os.system('python3 evaluate.py --normal_results_path {} --dataset_list {} {} {} {} {} {}'.format(LOGDIR+name+"/results/", 'testset_no_noise',  'testset_low_noise', 'testset_med_noise', 'testset_high_noise',
                              'testset_vardensity_striped', 'testset_vardensity_gradient'))
-
-

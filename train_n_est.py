@@ -1,3 +1,7 @@
+# train_n_est.py train a DeepFit model
+# Author:Itzik Ben Sabat sitzikbs[at]gmail.com
+# If you use this code,see LICENSE.txt file and cite our work
+
 from __future__ import print_function
 
 import argparse
@@ -62,7 +66,6 @@ def parse_arguments():
     parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
     parser.add_argument('--scheduler_type', type=str, default='step', help='step or plateau')
     parser.add_argument('--momentum', type=float, default=0.9, help='gradient descent momentum')
-    # parser.add_argument('--use_pca', type=int, default=False, help='Give both inputs and ground truth in local PCA coordinate frame')
     parser.add_argument('--normal_loss', type=str, default='sin', help='Normal loss type:\n'
                         'ms_euclidean: mean square euclidean distance\n'
                         'ms_oneminuscos: mean square 1-cos(angle error)\n'
@@ -198,8 +201,6 @@ def train_pcpnet(opt):
         else:
             refine_flag = False
 
-        # train_batchind = -1
-        # train_fraction_done = 0.0
         train_enum = enumerate(train_dataloader, 0)
 
         test_batchind = -1
