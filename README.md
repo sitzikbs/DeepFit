@@ -2,8 +2,8 @@
 ---
 Created by [Yizhak (Itzik) Ben-Shabat](http://www.itzikbs.com) and [Stephen Gould](http://users.cecs.anu.edu.au/~sgould/) from [ANU](https://www.anu.edu.au/) and [ACRV](https://www.roboticvision.org/) .
 
-<kbd><div style="max-width: 125px;  max-height: 125px;  border-radius: 50%;  padding: 0;" ><img src="https://github.com/sitzikbs/DeepFit/blob/master/doc/ybenshabat.jpg" /></div></kbd>
-<kbd><div style="max-width: 125px;  max-height: 125px;  border-radius: 50%;  padding: 0;" ><img src="https://github.com/sitzikbs/DeepFit/blob/master/doc/sgould.jpg"/></div></kbd>
+<kbd><div style="max-width: 125px;  max-height: 125px;  border:1px solid white; border-radius:50%;  padding: 0;" ><img src="https://github.com/sitzikbs/DeepFit/blob/master/doc/ybenshabat.jpg" /></div></kbd>
+<kbd><div style="max-width: 125px;  max-height: 125px;  border:1px solid white; border-radius:50%;  padding: 0;" ><img src="https://github.com/sitzikbs/DeepFit/blob/master/doc/sgould.jpg"/></div></kbd>
 
 ![DeepFit_pipeline](https://github.com/sitzikbs/DeepFit/blob/master/doc/DeepFit_Pipeline.png)
 
