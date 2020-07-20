@@ -6,3 +6,4 @@ data/
 *.job.*/
 **/server_outputs*
 cgal_cpp/results/
+.ipynb_checkpoints
