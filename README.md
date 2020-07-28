@@ -25,7 +25,7 @@ Abstract:
 
 We propose a surface fitting method for unstructured 3D point clouds. This method, called DeepFit, incorporates a neural network to learn point-wise weights for weighted least squares polynomial surface fitting. The learned weights act as a soft selection for the neighborhood of surface points thus avoiding the scale selection required of previous methods. To train the network we propose a novel surface consistency loss that improves point weight estimation. The method enables extracting normal vectors and other geometrical properties, such as principal curvatures, the latter were not presented as ground truth during training. We achieve state-of-the-art results on a benchmark normal and curvature estimation dataset, demonstrate robustness to noise, outliers and density variations, and show its application on noise removal.
 
-Our [short video](https://www.youtube.com/watch?v=jwZDU6hVUzA&t=9s) (2 minutes) and [extended video](https://www.youtube.com/watch?v=PrlFen2BuaU) (7.5 minutes) presentationare publicly available on YouTUbe. 
+Our [short video](https://www.youtube.com/watch?v=jwZDU6hVUzA&t=9s) (2 minutes) and [extended video](https://www.youtube.com/watch?v=PrlFen2BuaU) (7.5 minutes) presentation are available on YouTUbe. 
 
 ### Citation
 If you find our work useful in your research, please cite our paper:
