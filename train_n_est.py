@@ -215,7 +215,7 @@ def train_pcpnet(opt):
             # get trainingset batch and upload to GPU
             points = data[0]
             target = data[1:-2]
-            n_effective_points = data[-1].squeeze()
+            # n_effective_points = data[-1].squeeze()
 
             points = points.transpose(2, 1)
             points = points.to(device)
@@ -226,7 +226,7 @@ def train_pcpnet(opt):
             optimizer.zero_grad()
 
             # forward pass
-            pred, beta_pred, weights, trans, trans2, neighbor_normals = model(points, n_effective_points)
+            pred, beta_pred, weights, trans, trans2, neighbor_normals = model(points)
 
             loss, n_loss, _, consistency_loss, normal_loss = compute_loss(
                 pred=pred, target=target,
@@ -273,7 +273,7 @@ def train_pcpnet(opt):
                 points = data[0]
                 target = data[1:-2]
                 data_trans = data[-2]
-                n_effective_points = data[-1].squeeze()
+                # n_effective_points = data[-1].squeeze()
 
                 points = points.transpose(2, 1)
                 points = points.to(device)
@@ -284,8 +284,7 @@ def train_pcpnet(opt):
 
                 # forward pass
                 with torch.no_grad():
-                    pred, beta_pred, weights, trans, trans2, neighbor_normals = model(
-                            points, n_effective_points)
+                    pred, beta_pred, weights, trans, trans2, neighbor_normals = model(points)
 
                 loss, n_loss, err_angle, consistency_loss, normal_loss = compute_loss(
                     pred=pred, target=target,
