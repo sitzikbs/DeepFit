@@ -37,7 +37,7 @@ def parse_arguments():
     parser.add_argument('--desc', type=str, default='My training run for single-scale normal estimation.', help='description')
     parser.add_argument('--indir', type=str, default='/home/sitzikbs/Datasets/pcpnet/', help='input folder (point clouds)')
     parser.add_argument('--logdir', type=str, default='./log/', help='training log folder')
-    parser.add_argument('--trainset', type=str, default='trainingset_temp.txt', help='training set file name')
+    parser.add_argument('--trainset', type=str, default='trainingset_whitenoise.txt', help='training set file name')
     parser.add_argument('--testset', type=str, default='validationset_no_noise.txt', help='test set file name')
     parser.add_argument('--saveinterval', type=int, default='10', help='save model each n epochs')
     parser.add_argument('--refine', action="store_true", help='flag to refine the model, path determined by outri and model name')
@@ -80,8 +80,8 @@ def parse_arguments():
     parser.add_argument('--sym_op', type=str, default='max', help='symmetry operation')
     parser.add_argument('--point_tuple', type=int, default=1, help='use n-tuples of points as input instead of single points')
 
-    parser.add_argument('--use_point_stn', type=int, default=False, help='use point spatial transformer')
-    parser.add_argument('--use_feat_stn', type=int, default=False, help='use feature spatial transformer')
+    parser.add_argument('--use_point_stn', type=int, default=True, help='use point spatial transformer')
+    parser.add_argument('--use_feat_stn', type=int, default=True, help='use feature spatial transformer')
     parser.add_argument('--use_pca', type=int, default=True, help='use pca on point clouds, must be true for jet fit type')
 
 
@@ -562,13 +562,13 @@ def get_target_features(opt):
 def get_model(opt, log_dirname):
     # create model
     if opt.arch == 'simple':
-        model = DeepFit.SimpPointNet(1, opt.points_per_patch,
+        model = DeepFit.DeepFit(1, opt.points_per_patch,
                                             use_point_stn=opt.use_point_stn, use_feat_stn=opt.use_feat_stn,
                                             point_tuple=opt.point_tuple, sym_op=opt.sym_op,
                                             jet_order=opt.jet_order,
                                             weight_mode=opt.weight_mode, use_consistency=opt.use_consistency).cuda()
     elif opt.arch == '3dmfv':
-        model = DeepFit.SimpPointNet(1, opt.points_per_patch,
+        model = DeepFit.DeepFit(1, opt.points_per_patch,
                                             use_point_stn=opt.use_point_stn,
                                             use_feat_stn=opt.use_feat_stn, point_tuple=opt.point_tuple,
                                             sym_op=opt.sym_op, arch=opt.arch, n_gaussians=opt.n_gaussians,
