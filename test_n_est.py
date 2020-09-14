@@ -30,10 +30,10 @@ def parse_arguments():
 
     # naming / file handling
     parser.add_argument('--indir', type=str, default='/home/sitzikbs/Datasets/pcpnet/', help='input folder (point clouds)')
-    parser.add_argument('--testset', type=str, default='vis_set.txt', help='shape set file name')
-    parser.add_argument('--models', type=str, default='DeepFit', help='names of trained models, can evaluate multiple models')
-    parser.add_argument('--modelpostfix', type=str, default='_model_599.pth', help='model file postfix')
-    parser.add_argument('--logdir', type=str, default='./trained_models/', help='model folder')
+    parser.add_argument('--testset', type=str, default='testset_all.txt', help='shape set file name')
+    parser.add_argument('--models', type=str, default='DeepFit_no_noise', help='names of trained models, can evaluate multiple models')
+    parser.add_argument('--modelpostfix', type=str, default='_model_500.pth', help='model file postfix')
+    parser.add_argument('--logdir', type=str, default='./log/', help='model folder')
     parser.add_argument('--parmpostfix', type=str, default='_params.pth', help='parameter file postfix')
     parser.add_argument('--gpu_idx', type=int, default=1, help='set < 0 to use CPU')
 
@@ -91,7 +91,7 @@ def test_n_est(opt):
                 os.path.join(opt.logdir, model_name, "DeepFit.py")))
             DeepFit = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(DeepFit)
-            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
+            regressor = DeepFit.DeepFit(1, num_points=trainopt.points_per_patch,
                                                     use_point_stn=trainopt.use_point_stn,
                                                     use_feat_stn=trainopt.use_feat_stn, point_tuple=1,
                                                     sym_op=trainopt.sym_op, jet_order=trainopt.jet_order,
@@ -101,7 +101,7 @@ def test_n_est(opt):
                 os.path.join(opt.logdir, model_name, "DeepFitNormals.py")))
             DeepFit = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(DeepFit)
-            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
+            regressor = DeepFit.DeepFit(1, num_points=trainopt.points_per_patch,
                                                 use_point_stn=trainopt.use_point_stn,
                                                 use_feat_stn=trainopt.use_feat_stn, point_tuple=trainopt.point_tuple,
                                                 sym_op=trainopt.sym_op, arch=trainopt.arch,
@@ -146,7 +146,7 @@ def test_n_est(opt):
             with torch.no_grad():
                 if trainopt.arch == 'simple' or trainopt.arch == 'res' or trainopt.arch == '3dmfv':
                     start_time = time.time()
-                    n_est, beta_pred, weights, trans, trans2, neighbor_normals = regressor(points, n_effective_points)
+                    n_est, beta_pred, weights, trans, trans2, neighbor_normals = regressor(points)
                     end_time = time.time()
 
             print("elapsed_time per point: {} ms", 1000*(end_time-start_time) / opt.batchSize)
