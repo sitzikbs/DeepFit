@@ -149,7 +149,7 @@ def test_n_est(opt):
                     n_est, beta_pred, weights, trans, trans2, neighbor_normals = regressor(points)
                     end_time = time.time()
 
-            print("elapsed_time per point: {} ms", 1000*(end_time-start_time) / opt.batchSize)
+            print("elapsed_time per point: {} ms".format(1000*(end_time-start_time) / opt.batchSize))
 
             if trainopt.use_point_stn:
                 # transform predictions with inverse transform
