@@ -6,11 +6,11 @@ clc
 data_path = '/home/sitzikbs/Datasets/pcpnet/';
 file_sets_path = '/home/sitzikbs/Datasets/pcpnet/'; % directory containing lists of files ,camera parameters and shape list
 
-results_path = '/mnt/sitzikbs_storage/PycharmProjects/DeepFit3D/Normal_Estimation/log/baselines/DeepFit/results/';
+results_path = '/mnt/3.5TB_WD/PycharmProjects/SeNSor/log/v0/results/';
 % results_path = '/mnt/sitzikbs_storage/PycharmProjects/DeepFit3D/Normal_Estimation/log/excluded_baselines/jet/112_neighbors/';
 % results_path = '/mnt/sitzikbs_storage/PycharmProjects/DeepFit3D/Normal_Estimation/cgal_cpp/results/cgal/jet_large/';
 % results_path = '/mnt/sitzikbs_storage/PycharmProjects/pcpnet/results/PCPNet_ms_normal_curv/';
-file_list_file_name = 'testset_all.txt';
+file_list_file_name = 'testset_no_noise.txt';
 shape_list_file_name = 'testset_no_noise.txt';
 
 output_path = [results_path, 'images/'] ;
@@ -24,8 +24,8 @@ export_point_vis = true;
 export_normal_vis = true;
 % export_expert_vis = false;
 export_normal_error_vis = true;
-export_curvature_vis = true;
-export_curvature_error_vis = true;
+export_curvature_vis = false;
+export_curvature_error_vis = false;
 curvature_type = 'both';
 feature_type = 'curvatures';
 curv_err_type = 'L';

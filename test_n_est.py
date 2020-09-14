@@ -79,8 +79,8 @@ def test_n_est(opt):
         if not hasattr(trainopt, 'arch'):
             trainopt.arch = 'simple'
 
-	if opt.batchSize == 0:
-            opt.batchSize = trainopt.batchSize
+    if opt.batchSize == 0:
+        opt.batchSize = trainopt.batchSize
 
         # get indices in targets and predictions corresponding to each output
         target_features, output_target_ind, output_pred_ind, output_loss_weight, pred_dim = get_target_features((trainopt))

@@ -32,12 +32,12 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
 
     # naming / file handling
-    parser.add_argument('--name', type=str, default='debug', help='training run name')
+    parser.add_argument('--name', type=str, default='DeepFit_no_noise', help='training run name')
     parser.add_argument('--arch', type=str, default='simple', help='arcitecture name:  "simple" | "3dmfv"')
     parser.add_argument('--desc', type=str, default='My training run for single-scale normal estimation.', help='description')
     parser.add_argument('--indir', type=str, default='/home/sitzikbs/Datasets/pcpnet/', help='input folder (point clouds)')
     parser.add_argument('--logdir', type=str, default='./log/', help='training log folder')
-    parser.add_argument('--trainset', type=str, default='trainingset_whitenoise.txt', help='training set file name')
+    parser.add_argument('--trainset', type=str, default='trainingset_no_noise.txt', help='training set file name')
     parser.add_argument('--testset', type=str, default='validationset_no_noise.txt', help='test set file name')
     parser.add_argument('--saveinterval', type=int, default='10', help='save model each n epochs')
     parser.add_argument('--refine', action="store_true", help='flag to refine the model, path determined by outri and model name')
@@ -119,7 +119,7 @@ def train_pcpnet(opt):
     desc_filename = os.path.join(out_dir, '%s_description.txt' % (opt.name))
     log_filename = os.path.join(log_dirname, 'out.log')
 
-    if (os.path.exists(log_dirname) or os.path.exists(model_filename)) and not opt.name == 'debug' and opt.refine == '':
+    if (os.path.exists(log_dirname) or os.path.exists(model_filename)) and not opt.name == 'DeepFit_trainall' and opt.refine == '':
         if opt.overwrite:
             response = 'y'
         else:
