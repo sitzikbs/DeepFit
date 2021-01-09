@@ -53,7 +53,7 @@ For a full list of requirements see `requirements.txt`.
 To test DeepFit on your own data. Run the `compute_normals.py` in the `./tutorial` directory.
 It allows you to specify the input file path (`.xyz` file), output path for the estimated normals, jet order (1-4), and a mode (use pretrained DeepFit or our pytorch implementation of the classic jet fitting).
 
-To help you get started, we provide a step by step tutorial `./tutorial/DeepFit_tutorial.ipynb` with extended explenations, interactive visualizations and example files.
+To help you get started, we provide a step by step tutorial `./tutorial/DeepFit_tutorial.ipynb` with extended explanations, interactive visualizations and example files.
 
  ##### 3.Reproduce the results in the paper:
 Run `get_data.py` to download PCPNet data.
