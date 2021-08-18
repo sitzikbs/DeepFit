@@ -84,13 +84,13 @@ def test_n_est(opt):
         dataloader, dataset, datasampler = get_data_loaders(opt, trainopt, target_features)
 
         if trainopt.arch == 'simple':
-            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
+            regressor = DeepFit.DeepFit(1, num_points=trainopt.points_per_patch,
                                                     use_point_stn=trainopt.use_point_stn,
                                                     use_feat_stn=trainopt.use_feat_stn, point_tuple=1,
                                                     sym_op=trainopt.sym_op, jet_order=trainopt.jet_order,
                                                     weight_mode=trainopt.weight_mode).cuda()
         elif trainopt.arch == '3dmfv':
-            regressor = DeepFit.SimpPointNet(1, num_points=trainopt.points_per_patch,
+            regressor = DeepFit.DeepFit(1, num_points=trainopt.points_per_patch,
                                                 use_point_stn=trainopt.use_point_stn,
                                                 use_feat_stn=trainopt.use_feat_stn, point_tuple=trainopt.point_tuple,
                                                 sym_op=trainopt.sym_op, arch=trainopt.arch,
