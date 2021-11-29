@@ -125,7 +125,6 @@ def test_n_est(opt):
             points = data[0]
             target = data[1:-2]
             data_trans = data[-2]
-            n_effective_points = data[-1].squeeze()
             scale_radius = data[-1].squeeze()
 
 
@@ -137,12 +136,11 @@ def test_n_est(opt):
 
             with torch.no_grad():
                 if trainopt.arch == 'simple' or trainopt.arch == 'res' or trainopt.arch == '3dmfv':
-                    n_est, beta_pred, weights, n_res, trans, _, _, _ = regressor(points, n_effective_points)
+                    n_est, beta_pred, weights, n_res, trans, _, _, _ = regressor(points)
                 elif trainopt.arch =='pcpnet_res':
                     n_est, trans, _, _, n_res = regressor(points)
                 elif trainopt.arch == 'experts':
-                    n_est, beta_pred, weights, n_res, trans, trans2, expert_prob, expert_normals = regressor(points,
-                                                                                                        n_effective_points)
+                    n_est, beta_pred, weights, n_res, trans, trans2, expert_prob, expert_normals = regressor(points)
 
 
             if trainopt.use_point_stn:
